@@ -1,25 +1,24 @@
 DECLARE
-    pdate DATE := TO_DATE('04.01.2010', 'DD.MM.YYYY'); 
-    CURSOR cur IS 
+    CURSOR cur (pDate VARCHAR2) IS 
         SELECT onum, odate, cnum
         FROM ORD
-        WHERE odate >= pdate
-        ORDER BY odate; 
+        WHERE TO_CHAR(odate, 'dd.mm.yyyy') = pDate
+        ORDER BY odate;
 
     v_order cur%ROWTYPE;  
+    v_date VARCHAR2(10) := '04.01.2010';
 
 BEGIN
-    -- Открываем курсор и обрабатываем его
-    OPEN cur;
+    OPEN cur(v_date);
     
     LOOP
-        FETCH cur INTO v_order;  -- Извлекаем данные из курсора
-        EXIT WHEN cur%NOTFOUND;   -- Выход из цикла, если нет больше записей
+        FETCH cur INTO v_order;  
+        EXIT WHEN cur%NOTFOUND;   
         
         -- Выводим информацию о заказе
-        DBMS_OUTPUT.PUT_LINE('Order ID: ' || v_order.onum ||
-                             ', Order Date: ' || TO_CHAR(v_order.odate, 'DD.MM.YYYY') || 
-                             ', Customer ID: ' || v_order.cnum);
+        DBMS_OUTPUT.PUT_LINE('Order ID: ' || v_order.onum 
+                             || ', Order Date: ' || TO_CHAR(v_order.odate, 'DD.MM.YYYY')  
+                             || ', Customer ID: ' || v_order.cnum);
     END LOOP;
 
     CLOSE cur;  -- Закрываем курсор
