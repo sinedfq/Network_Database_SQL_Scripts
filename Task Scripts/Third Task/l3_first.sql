@@ -30,3 +30,8 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Ошибка: Запись с dept_no = ' || old_dept_no || ' не существует.');
 END;
 /
+
+BEGIN
+    update_dep_number(10, 20);
+END;
+/
